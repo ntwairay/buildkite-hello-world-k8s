@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # image name
 IMAGE=rayhub/hello-world
 
