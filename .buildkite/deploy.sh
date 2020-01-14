@@ -30,14 +30,22 @@ helm repo update
 if [ ${BUILDKITE_BRANCH} ="master" ]
 then
   TAG=latest
+  ENV=prod
 else
   TAG=${BUILDKITE_COMMIT::8}
+  ENV=dev
 fi
 
-# # app name
-# APP=some_app
-#
-# # deploy/upgrade app with helm
-# echo "--- Deploying $APP :rocket:"
-# helm upgrade --install ${APP} charts/my_app --namespace ${SOME_NAMESPACE} --reuse-values \
-#   --set image.tag="${GIT_TAG}"
+echo "GCP Configuration"
+GCP_PROJECT=msteps-website-1550665534040
+GKE_CLUSTER=msteps-gke-cluster
+gcloud config set project ${GCP_PROJECT}
+gcloud container clusters get-credentials ${GKE_CLUSTER} --region australia-southeast1
+
+cd ${BUILDKITE_PIPELINE_SLUG}/deploy
+
+echo "Helm deploy"
+RAILS_ENV=${ENV} helmfile sync
+
+echo "kustomize deploy"
+kustomize build ./environments/${ENV} | kubectl apply -f -
