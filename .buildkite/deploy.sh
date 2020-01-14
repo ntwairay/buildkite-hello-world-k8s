@@ -37,8 +37,8 @@ else
 fi
 
 echo "GCP Configuration"
-GCP_PROJECT=msteps-website-1550665534040
-GKE_CLUSTER=msteps-gke-cluster
+GCP_PROJECT=juelian-terraform-233422
+GKE_CLUSTER=build-kite-test-kubecluster
 gcloud config set project ${GCP_PROJECT}
 gcloud container clusters get-credentials ${GKE_CLUSTER} --region australia-southeast1
 
