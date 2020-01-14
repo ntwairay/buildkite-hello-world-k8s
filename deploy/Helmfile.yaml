@@ -1,0 +1,9 @@
+repositories:
+
+releases:
+  - name: helloworld
+    namespace: application
+    chart: ./hello-chart
+    # DB host, port, and connection opts for the environment
+    values:
+    - "./environments/{{ env "RAILS_ENV" }}/helm/hello-world-value.yaml"

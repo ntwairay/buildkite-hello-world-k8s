@@ -1,0 +1,41 @@
+steps:
+
+# Test release
+  - name: "Run :docker: compose tests :testflight:"
+    command: docker-compose run --rm test
+    branches: test
+    plugins:
+      docker-compose:
+        run: test
+  - wait
+  - name: "Build :docker: image and push it to registry :rocket:"
+    command: .buildkite/build.sh
+    branches: test
+
+  - wait
+  - name: "Deploy :docker: image to Test Workflow"
+    command: .buildkite/deploy.sh
+    branches: test
+
+# Staging release
+  - name: "Build :docker: image and push it to registry :rocket:"
+    command: .buildkite/build.sh
+    branches: staging
+
+  - wait
+  - name: "Deploy :docker: image to Staging"
+    command: .buildkite/deploy.sh
+    branches: staging
+
+  - wait
+
+# Production release
+  # wait for unblock by team member
+  - name: "Build :docker: image and push it to registry :rocket:"
+    command: .buildkite/build.sh
+    branches: master
+  - wait
+
+  - name: ":rocket: Deploying to Production"
+    command: .buildkite/deploy.sh
+    branches: master
