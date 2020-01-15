@@ -1,3 +1,4 @@
 resources:
   - ingress.yaml
+  - configMap.yaml
   # - gke-admin-service-account.yaml

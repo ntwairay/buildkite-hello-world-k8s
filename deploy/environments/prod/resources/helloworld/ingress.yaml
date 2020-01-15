@@ -22,5 +22,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: helloworld-helloworld-chart
+          serviceName: helloworld
           servicePort: 8080
