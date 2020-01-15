@@ -1,8 +1,18 @@
 #!/bin/bash
+
+set -e
+
+sudo apt-get update
+sudo apt install docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+
 # image name
 IMAGE=rayhub/hello-world
 
 # use buildkite commit hash as a TAG
+
+echo ${BUILDKITE_BRANCH}
 
 if [ ${BUILDKITE_BRANCH} ="master" ]
 then
@@ -11,21 +21,16 @@ else
   TAG=${BUILDKITE_COMMIT::8}
 fi
 
-# make tmp folder
-mkdir /tmp
-cd /tmp
-ls
-
 #  clone repo
 # env SSH_AUTH_SOCK= GIT_SSH_COMMAND='ssh -v -i /home/juelian_siow/.ssh/id_rsa' git clone SSH://${BUILDKITE_REPO}
 git clone ${BUILDKITE_REPO}
-git clone git@github.com:ScentreGroup/wrs_centre_service.git
+#git clone git@github.com:ScentreGroup/wrs_centre_service.git
 
 # cd to pulled repo folder
-cd /tmp/${BUILDKITE_PIPELINE_SLUG}
+cd ${BUILDKITE_REPO}
 
-# checkout branch
-git checkout ${BUILDKITE_BRANCH}
+# # checkout branch
+# git checkout ${BUILDKITE_BRANCH}
 
 # build docker image
 echo -e "\n--- Building :docker: image ${IMAGE}:${TAG}"
@@ -46,4 +51,4 @@ docker push ${DOCKER_REPO}/${IMAGE}:${TAG}
 echo "--- Cleaning up :docker: image ${DOCKER_REPO}/${IMAGE}:${TAG}"
 docker rmi -f ${DOCKER_REPO}/${IMAGE}:${TAG}
 
-rm -rf /tmp/${BUILDKITE_PIPELINE_SLUG}
+rm -rf ${BUILDKITE_REPO}
