@@ -2,6 +2,9 @@
 
 set -e
 
+echo "list"
+ls
+
 if [ ${BUILDKITE_BRANCH} == "master" ]
 then
   TAG=latest
