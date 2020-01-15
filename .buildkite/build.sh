@@ -2,13 +2,14 @@
 
 set -e
 # image name
-IMAGE=rayhub/hello-world
+DOCKER_REPO=rayhub
+IMAGE=hello-world
 
 # use buildkite commit hash as a TAG
 
 echo ${BUILDKITE_BRANCH}
 
-if [ ${BUILDKITE_BRANCH} ="master" ]
+if [ ${BUILDKITE_BRANCH} = "master" ]
 then
   TAG=latest
 else
@@ -48,3 +49,4 @@ echo "--- Cleaning up :docker: image ${DOCKER_REPO}/${IMAGE}:${TAG}"
 docker rmi -f ${DOCKER_REPO}/${IMAGE}:${TAG}
 
 rm -rf ./tmp/${BUILDKITE_REPO}
+docker rmi -f $(docker images -a -q)
