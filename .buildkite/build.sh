@@ -14,6 +14,7 @@ fi
 # make tmp folder
 mkdir /tmp
 cd /tmp
+ls
 
 #  clone repo
 # env SSH_AUTH_SOCK= GIT_SSH_COMMAND='ssh -v -i /home/juelian_siow/.ssh/id_rsa' git clone SSH://${BUILDKITE_REPO}
@@ -21,7 +22,7 @@ git clone ${BUILDKITE_REPO}
 git clone git@github.com:ScentreGroup/wrs_centre_service.git
 
 # cd to pulled repo folder
-cd ${BUILDKITE_PIPELINE_SLUG}
+cd /tmp/${BUILDKITE_PIPELINE_SLUG}
 
 # checkout branch
 git checkout ${BUILDKITE_BRANCH}
@@ -44,3 +45,5 @@ docker push ${DOCKER_REPO}/${IMAGE}:${TAG}
 # local clean up
 echo "--- Cleaning up :docker: image ${DOCKER_REPO}/${IMAGE}:${TAG}"
 docker rmi -f ${DOCKER_REPO}/${IMAGE}:${TAG}
+
+rm -rf /tmp/${BUILDKITE_PIPELINE_SLUG}

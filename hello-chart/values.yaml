@@ -8,6 +8,11 @@ image:
   repository: kornkitti/express-hello-world
   tag: latest
   pullPolicy: IfNotPresent
+  envFrom:
+
+extra:
+  configMap:
+    name: "ray-configmap"
 
 nameOverride: ""
 fullnameOverride: ""
