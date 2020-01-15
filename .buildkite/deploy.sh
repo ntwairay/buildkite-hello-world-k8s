@@ -4,8 +4,9 @@ set -e
 
 echo "list"
 ls
+pwd
 
-cd ./deploy
+cd pwd/deploy
 
 if [ ${BUILDKITE_BRANCH} == "master" ]
 then
