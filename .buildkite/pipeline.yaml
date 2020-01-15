@@ -13,7 +13,7 @@ steps:
     plugins:
       - docker-login#v2.0.1:
           username: rayhub
-          password-env: DOCKER_LOGIN_PASSWORD
+          password-env: ${DOCKER_LOGIN_PASSWORD}
 
   - wait
   - name: "Deploy :docker: image to Test Workflow"
