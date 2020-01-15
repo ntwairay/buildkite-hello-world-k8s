@@ -38,7 +38,7 @@ fi
 
 echo "GCP Configuration"
 GCP_PROJECT=juelian-terraform-233422
-GKE_CLUSTER=build-kite-test-kubecluster
+GKE_CLUSTER=buildkite-gke
 gcloud config set project ${GCP_PROJECT}
 gcloud container clusters get-credentials ${GKE_CLUSTER} --region australia-southeast1
 
