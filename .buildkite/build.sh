@@ -2,10 +2,10 @@
 
 set -e
 
-sudo apt-get update
-sudo apt install docker.io
-sudo systemctl start docker
-sudo systemctl enable docker
+apt-get update
+apt install docker.io
+systemctl start docker
+systemctl enable docker
 
 # image name
 IMAGE=rayhub/hello-world
