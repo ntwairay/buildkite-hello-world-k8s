@@ -5,6 +5,8 @@ set -e
 echo "list"
 ls
 
+cd ./deploy
+
 if [ ${BUILDKITE_BRANCH} == "master" ]
 then
   TAG=latest
@@ -19,8 +21,6 @@ GCP_PROJECT=juelian-terraform-233422
 GKE_CLUSTER=buildkite-gke
 gcloud config set project ${GCP_PROJECT}
 gcloud container clusters get-credentials ${GKE_CLUSTER} --region australia-southeast1-b
-
-cd deploy
 
 echo "Helm deploy"
 RAILS_ENV=${ENV} helmfile sync
