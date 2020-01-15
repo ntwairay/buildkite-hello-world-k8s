@@ -7,6 +7,8 @@ ls
 pwd
 
 cd $PWD/deploy
+echo "list2"
+ls
 
 if [ ${BUILDKITE_BRANCH} == "master" ]
 then
