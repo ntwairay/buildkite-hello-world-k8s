@@ -2,9 +2,6 @@
 
 set -e
 
-echo "list"
-ls
-
 if [ ${BUILDKITE_BRANCH} == "master" ]
 then
   TAG=latest
@@ -20,7 +17,7 @@ GKE_CLUSTER=buildkite-gke
 gcloud config set project ${GCP_PROJECT}
 gcloud container clusters get-credentials ${GKE_CLUSTER} --region australia-southeast1-b
 
-cd ./tmp/${BUILDKITE_PIPELINE_SLUG}
+cd deploy
 
 echo "Helm deploy"
 RAILS_ENV=${ENV} helmfile sync
