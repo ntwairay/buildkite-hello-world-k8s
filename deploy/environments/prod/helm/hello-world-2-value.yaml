@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 deployment:
-  replicas: 3
+  replicas: 2
 
 image:
   repository: kornkitti/express-hello-world
