@@ -16,7 +16,8 @@ mkdir /tmp
 cd /tmp
 
 #  clone repo
-env SSH_AUTH_SOCK= GIT_SSH_COMMAND='ssh -v -i /home/juelian_siow/.ssh/id_rsa' git clone ${BUILDKITE_REPO}
+# env SSH_AUTH_SOCK= GIT_SSH_COMMAND='ssh -v -i /home/juelian_siow/.ssh/id_rsa' git clone SSH://${BUILDKITE_REPO}
+git clone ${BUILDKITE_REPO}
 
 # cd to pulled repo folder
 cd ${BUILDKITE_PIPELINE_SLUG}
