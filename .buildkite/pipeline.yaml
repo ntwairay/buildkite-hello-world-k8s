@@ -1,5 +1,4 @@
 steps:
-
 # Test release
   - name: "Run :docker: compose tests :testflight:"
     command: docker-compose run --rm test
