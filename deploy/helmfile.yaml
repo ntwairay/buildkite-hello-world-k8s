@@ -10,3 +10,4 @@ releases:
     # version: ~0.3.2
     values:
     - "./environments/{{ env "RAILS_ENV" }}/helm/hello-world-value.yaml"
+    - "./environments/{{ env "RAILS_ENV" }}/helm/timer-value.yaml"
