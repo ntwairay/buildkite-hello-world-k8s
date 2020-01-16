@@ -2,6 +2,8 @@
 
 set -e
 
+cd $PWD/deploy
+
 if [ ${BUILDKITE_BRANCH} == "master" ]
 then
   TAG=latest
