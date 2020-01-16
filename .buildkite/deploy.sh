@@ -2,10 +2,6 @@
 
 set -e
 
-echo "list"
-ls
-pwd
-
 cd $PWD/deploy
 
 if [ ${BUILDKITE_BRANCH} == "master" ]
@@ -24,11 +20,11 @@ gcloud container clusters get-credentials ${GKE_CLUSTER} --region australia-sout
 echo "Helm deploy"
 RAILS_ENV=${ENV} helmfile sync
 
-echo "kustomize deploy"
+echo "Kustomize deploy"
 /kustomize build ./environments/${ENV}/ | kubectl apply -f -
 
-echo "provision properties for configmap"
+echo "Provision properties for configmap"
 cat ../config/kustomization.tpl | sed "s/\$env/$ENV/" > ../config/kustomization.yaml | /kustomize build ../config/ | kubectl apply -f -
 
-echo "clean up"
+echo "Clean up"
 rm -rf ./tmp/${BUILDKITE_PIPELINE_SLUG}

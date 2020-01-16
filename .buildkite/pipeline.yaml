@@ -30,14 +30,14 @@ steps:
 
 # Production release
   # wait for unblock by team member
-  # - name: "Build :docker: image and push it to registry :rocket:"
-  #   command: .buildkite/build.sh
-  #   branches: master
-  #   plugins:
-  #     - docker-login#v2.0.1:
-  #         username: rayhub
-  #         password-env: DOCKER_LOGIN_PASSWORD
-  # - wait
+  - name: "Build :docker: image and push it to registry :rocket:"
+    command: .buildkite/build.sh
+    branches: master
+    plugins:
+      - docker-login#v2.0.1:
+          username: rayhub
+          password-env: DOCKER_LOGIN_PASSWORD
+  - wait
 
   - name: ":rocket: Deploying to Production"
     command: .buildkite/deploy.sh
