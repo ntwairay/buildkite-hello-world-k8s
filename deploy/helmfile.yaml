@@ -1,12 +1,12 @@
 repositories:
-  - name: scentregroup
-    url: gs://scg-helm-charts
+  # - name: scentregroup
+  #   url: gs://scg-helm-charts
 
 releases:
   - name: helloworld
     namespace: application
-  #  chart: /tmp/helm-charts/charts/base-service/
-    chart: scentregroup/base-service
-    version: ~0.3.2
+    chart: /tmp/helm-charts/charts/base-service/
+    # chart: scentregroup/base-service
+    # version: ~0.3.2
     values:
     - "./environments/{{ env "RAILS_ENV" }}/helm/hello-world-2-value.yaml"
