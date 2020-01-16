@@ -10,4 +10,11 @@ releases:
     # version: ~0.3.2
     values:
     - "./environments/{{ env "RAILS_ENV" }}/helm/hello-world-value.yaml"
+
+  - name: timer
+    namespace: application
+    chart: /tmp/helm-charts/charts/base-service/
+    # chart: scentregroup/base-service
+    # version: ~0.3.2
+    values:
     - "./environments/{{ env "RAILS_ENV" }}/helm/timer-value.yaml"
