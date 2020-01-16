@@ -2,7 +2,11 @@
 
 set -e
 
-cd $PWD/deploy
+echo "list"
+ls
+pwd
+
+cd ./deploy
 
 if [ ${BUILDKITE_BRANCH} == "master" ]
 then
