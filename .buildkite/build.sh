@@ -1,11 +1,6 @@
 #!/bin/bash
 
 set -e
-# image name
-DOCKER_REPO=rayhub
-IMAGE=hello-world
-
-# use buildkite commit hash as a TAG
 
 echo ${BUILDKITE_BRANCH}
 
@@ -19,15 +14,10 @@ fi
 mkdir ./tmp
 
 #  clone repo
-# env SSH_AUTH_SOCK= GIT_SSH_COMMAND='ssh -v -i /home/juelian_siow/.ssh/id_rsa' git clone SSH://${BUILDKITE_REPO}
 git clone ${BUILDKITE_REPO} ./tmp/${BUILDKITE_PIPELINE_SLUG}
-#git clone git@github.com:ScentreGroup/wrs_centre_service.git
 
 # cd to pulled repo folder
 cd ./tmp/${BUILDKITE_PIPELINE_SLUG}
-
-# # checkout branch
-# git checkout ${BUILDKITE_BRANCH}
 
 # build docker image
 echo -e "\n--- Building :docker: image ${IMAGE}:${TAG}"
