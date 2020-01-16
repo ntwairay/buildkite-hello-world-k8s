@@ -27,7 +27,7 @@ echo "Helm deploy"
 RAILS_ENV=${ENV} helmfile sync
 
 # echo "kustomize deploy"
-kustomize build ./environments/${ENV} | kubectl apply -f -
+kustomize build environments/${ENV}/ | kubectl apply -f -
 
 echo "clean up"
 rm -rf ./tmp/${BUILDKITE_PIPELINE_SLUG}
