@@ -6,7 +6,7 @@ deployment:
   replicas: 1
 
 image:
-  repository: rrayhub/timer-flaskapp
+  repository: rayhub/timer-flaskapp
 
 ingress:
   enabled: false
