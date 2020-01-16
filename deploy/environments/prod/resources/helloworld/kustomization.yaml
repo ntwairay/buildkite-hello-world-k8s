@@ -4,7 +4,6 @@ resources:
 
 configMapGenerator:
   - name: ray-configmap
-    behavior: replace
     files:
     - base.properties
 
