@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 deployment:
-  replicas: 2
+  replicas: 3
 
 image:
   repository: rayhub/hello-world
