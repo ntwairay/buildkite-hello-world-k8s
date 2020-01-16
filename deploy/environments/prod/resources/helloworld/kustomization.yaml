@@ -1,11 +1,3 @@
 resources:
   - ingress.yaml
-  - configMap.yaml
-
-configMapGenerator:
-  - name: ray-configmap
-    files:
-    - base.properties
-
-generatorOptions:
- disableNameSuffixHash: true
+  - extra-job-1.yaml
