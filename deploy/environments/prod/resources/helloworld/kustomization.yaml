@@ -1,4 +1,12 @@
 resources:
   - ingress.yaml
   - configMap.yaml
-  # - gke-admin-service-account.yaml
+
+configMapGenerator:
+  - name: ray-configmap
+    behavior: merge
+    files:
+    - base.properties
+
+generatorOptions:
+ disableNameSuffixHash: true

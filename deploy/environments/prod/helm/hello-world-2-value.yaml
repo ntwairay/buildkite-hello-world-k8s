@@ -6,7 +6,7 @@ deployment:
   replicas: 2
 
 image:
-  repository: kornkitti/express-hello-world
+  repository: rayhub/hello-world
 
 ingress:
   enabled: false

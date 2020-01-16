@@ -10,14 +10,14 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    external-dns.alpha.kubernetes.io/hostname: google.gradeous.io
+    external-dns.alpha.kubernetes.io/hostname: servian.gradeous.io
   labels:
     app: helloworld-ingress
   name: helloworld
   namespace: application
 spec:
   rules:
-  - host: helloworld.google.gradeous.io
+  - host: helloworld.servian.gradeous.io
     http:
       paths:
       - path: /
