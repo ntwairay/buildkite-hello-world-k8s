@@ -1,0 +1,18 @@
+# Default values for helloworld-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deployment:
+  replicas: 1
+
+image:
+  repository: rrayhub/timer-flaskapp
+
+ingress:
+  enabled: false
+
+redis:
+  enabled: false
+
+container:
+  port: 5000
