@@ -14,5 +14,5 @@ spec:
       containers:
       - name: c
         image: busybox
-        command: ["sh", "-c", "echo Processing items apple and orange && sleep 5"]
+        command: ["sh", "-c", "echo Processing items Ray Ng && sleep 5"]
       restartPolicy: Never

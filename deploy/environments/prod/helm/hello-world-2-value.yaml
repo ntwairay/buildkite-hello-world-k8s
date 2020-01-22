@@ -17,5 +17,5 @@ redis:
 container:
   port: 8080
 
-# config:
-#   envFromConfigMaps: [""]
+config:
+  envFromSecrets: ["env-secrets"]

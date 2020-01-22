@@ -1,5 +1,0 @@
-namespace: application
-
-resources:
-  - ingress.yaml
-  - extra-job-1.yaml

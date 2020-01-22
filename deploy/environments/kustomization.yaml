@@ -1,0 +1,7 @@
+namespace: application
+
+resources:
+  - prod/kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
