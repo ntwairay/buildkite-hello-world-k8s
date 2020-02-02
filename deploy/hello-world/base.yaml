@@ -3,16 +3,10 @@
 # Declare variables to be passed into your templates.
 
 deployment:
-  replicas: 1
-
+    replicas: 3
+  
 image:
-  repository: rayhub/timer-flaskapp
-
-ingress:
-  enabled: false
-
+    repository: rayhub/hello-world
+  
 redis:
-  enabled: false
-
-container:
-  port: 5000
+    enabled: false

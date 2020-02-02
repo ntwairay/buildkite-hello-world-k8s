@@ -20,11 +20,3 @@ gcloud container clusters get-credentials ${GKE_CLUSTER} --region australia-sout
 echo "Helm deploy"
 RAILS_ENV=${ENV} helmfile sync
 
-echo "Kustomize deploy"
-/kustomize build ./environments/${ENV}/ | kubectl apply -f -
-
-echo "Provision properties for configmap"
-cat ../config/kustomization.tpl | sed "s/\$env/$ENV/" > ../config/kustomization.yaml | /kustomize build ../config/ | kubectl apply -f -
-
-echo "Clean up"
-rm -rf ./tmp/${BUILDKITE_PIPELINE_SLUG}

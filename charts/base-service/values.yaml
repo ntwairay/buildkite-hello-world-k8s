@@ -1,0 +1,97 @@
+image:
+  repository: nginx
+  tag: latest
+  pullPolicy: Always
+  pullSecrets: dockerhub-scentregrouplimited
+
+container:
+  port: 80
+  command: []
+  livenessUrl: /
+  readyUrl: /
+
+deployment:
+  replicas: 2
+  resources:
+    limits:
+      cpu: "1"
+      memory: "512Mi"
+    requests:
+      cpu: "0.1"
+      memory: "128Mi"
+
+ingress:
+  enabled: true
+  class: nginx-internal
+  sslRedirect: "false"
+  clusterIssuer: false
+  path: /
+  hostnameOverride: false
+  domain: dev.scg.cloud
+  tls: []
+  # - hosts:
+  #   - "foo.scentregroup.cloud"
+
+redis:
+  enabled: false
+
+vault:
+  enabled: false
+  synchronizerImage: seanson/vault-k8s-mapper:dev
+  address: https://vault.scentregroup.cloud
+  authMountPath: "" # /cp-dev-cp-0
+  role: "" # cp-dev-cp-0-readonly
+  secretTarget: "" # app-name
+  secretSources: "" # /secret/rancher/stacks/dev/identity-client/:value
+
+sidecars:
+  sso:
+    enabled: false
+    image: quay.io/pusher/oauth2_proxy:v3.2.0
+    cookieSecure: false
+    emailDomains: scentregroup.com
+    azureTenant: "replace_me"
+    cookieSecret: "cmVwbGFjZV9tZV9hdF9ydW50aW1lCg==" # "replace_me"
+    clientId: "Y2xpZW50SWRfcmVwbGFjZV9tZQo=" # "clientId_replace_me"
+    clientSecret: "Y2xpZW50U2VjcmV0X3JlcGxhY2VfbWUK" # "clientSecret_replace_me"
+    passHostHeader: false
+    provider: azure
+    skipProviderButton: true
+
+initContainers: []
+#   - name: db_migrate
+#     command: ["/bin/sh", "-c", "rake db:migrate"]
+#     image:
+#       repopository: alpine (Optional, will default to image.repository if not specified)
+#       tag: latest          (Optional, will default to image.tag if not specified)
+
+cronJobs: []
+  # - name: contentful pull
+  #   command: ["rake", "contentful:pull", "--trace"]
+  #   args: ["ls"]
+  #   schedule: "*/5 * * * *"
+#     image:
+#       repopository: alpine (Optional, will default to image.repository if not specified)
+#       tag: latest          (Optional, will default to image.tag if not specified)
+
+jobs: []
+#   - name: db migrate
+#     command: ["/bin/sh", "-c"]
+#     args: ["ls"]
+
+config:
+  configMap: []
+  # - name: CONFIGMAP_KEY
+  #   value: config_value
+  # secrets:
+  # - name: SECRET_KEY
+  #   value: c2VjcmV0X3ZhbHVl # secret_value
+  env: {}
+  # VAR_NAME: env_value
+  envFromConfigMaps: [] # Must be in the same namespace
+  #   - CONFIGMAP_NAME
+  envFromSecrets: [] # Must be in the same namespace
+  #   - SECRET_NAME
+
+nameOverride: ""
+fullnameOverride: ""

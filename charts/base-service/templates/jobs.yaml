@@ -1,0 +1,36 @@
+{{- /*
+Assign the current context to a variable to access it in range iteration below
+TODO: Rebuild this to be a standard range JobList
+*/ -}}
+
+{{- $self := . -}}
+{{- $name := include "base-service.name" . -}}
+
+{{- if .Values.jobs }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}-jobs
+spec:
+  template:
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecrets }}
+{{- if .Values.initCommand }}
+      initContainers:
+        - name: init-command
+{{ include "base-service.appContainer" . | indent 10 }}
+          command: {{ toJson .Values.initCommand }}
+{{- end }}
+      containers:
+{{- range .Values.jobs }}
+        - name: {{ .name | replace " " "-" }}
+          command: {{ toJson .command }}
+          {{- if .args }}
+          args: {{ toJson .args }}
+          {{- end }}
+{{ include "base-service.appContainer" $self | indent 10 }}
+{{- end }}
+      restartPolicy: Never
+  backoffLimit: 1
+{{- end }}

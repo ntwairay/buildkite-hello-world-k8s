@@ -1,0 +1,24 @@
+{{- $name := include "base-service.name" . -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    helm.sh/chart: {{ include "base-service.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  ports:
+    - port: {{ .Values.container.port }}
+{{- if .Values.sidecars.sso.enabled }}
+      targetPort: 4180
+{{- else }}
+      targetPort: {{ .Values.container.port }}
+{{- end }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ $name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

@@ -1,0 +1,18 @@
+repositories:
+  # - name: scentregroup
+  #   url: gs://scg-helm-charts
+
+releases:
+  - name: helloworld
+    namespace: application
+    chart: ./charts/base-service/
+    values:
+    - "./deploy/hello-world/base.yaml"
+    - "./deploy/hello-world/{{ env "RAILS_ENV" }}.yaml"
+
+  - name: timer
+    namespace: application
+    chart: ./charts/base-service/
+    values:
+      - "./deploy/timer/base.yaml"
+      - "./deploy/timer/{{ env "RAILS_ENV" }}.yaml"

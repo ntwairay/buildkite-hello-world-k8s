@@ -1,0 +1,10 @@
+deployment:
+    replicas: 1
+  
+image:
+    repository: rayhub/timer-flaskapp
+  
+  
+redis:
+    enabled: false
+  

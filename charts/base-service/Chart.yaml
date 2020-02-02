@@ -1,0 +1,4 @@
+apiVersion: v1
+description: An opinionated Helm chart for deploying basic HTTP services
+name: base-service
+version: 0.5.2

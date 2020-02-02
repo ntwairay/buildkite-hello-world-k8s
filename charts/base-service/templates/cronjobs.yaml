@@ -1,0 +1,44 @@
+{{- /*
+Assign the current context to a variable to access it in range iteration below
+TODO: Rebuild this to be a standard range JobList
+*/ -}}
+
+{{- $context := . -}}
+{{- $name := include "base-service.name" . -}}
+{{- $pullSecrets := .Values.image.pullSecrets -}}
+{{- $image := printf "%s:%s" .Values.image.repository .Values.image.tag -}}
+
+{{- range $job := .Values.cronJobs }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ $job.name | replace " " "-" }}-cronjob
+  namespace: {{ $context.Release.Namespace }}
+spec:
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: {{ $name }}
+            cron: {{ $job.name | replace " " "-" }}
+        spec:
+          imagePullSecrets:
+            - name: {{ $pullSecrets }}
+          containers:
+          - name: {{ $job.name | replace " " "-" }}
+{{- if hasKey $job "image" }}
+            image: {{ $job.image.repository }}:{{ $job.image.tag }}
+{{- else }}
+            image: {{ $image }}
+{{- end }}
+{{- include "base-service.appEnv" $context | indent 12 }}
+            {{- if $job.command }}
+            command: {{ toJson $job.command }}
+            {{- end }}
+            {{- if $job.args }}
+            args: {{ toJson $job.args }}
+            {{- end }}
+          restartPolicy: Never
+  schedule: {{ $job.schedule | quote }}
+{{- end }}

@@ -1,0 +1,110 @@
+{{- $name := include "base-service.name" . -}}
+{{- $image := printf "%s:%s" .Values.image.repository .Values.image.tag -}}
+{{- $context := . -}}
+{{- $fqdn := default (printf "%s.%s" $name .Values.ingress.domain) .Values.ingress.hostnameOverride -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    helm.sh/chart: {{ include "base-service.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ $name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ $name }}
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecrets }}
+{{- if or .Values.initContainers .Values.vault.enabled }}
+      initContainers:
+{{- range .Values.initContainers }}
+        - name: {{ .name | replace " " "-" }}
+          command: {{ toJson .command }}
+{{- if hasKey . "image" }}
+          image: {{ .image.repository }}:{{ .image.tag }}
+{{- else }}
+          image: {{ $image }}
+{{- end }}
+{{- include "base-service.appEnv" $context | indent 10 }}
+{{- end }}
+{{- if .Values.vault.enabled }}
+        - name: vault-kubernetes-authenticator
+          image: {{ .Values.vault.synchronizerImage }}
+          imagePullPolicy: Always
+          env:
+          - name: VAULT_ADDRESS
+            value: {{ .Values.vault.address }}
+          - name: VAULT_AUTH_PATH
+            value: {{ .Values.vault.authMountPath }}
+          - name: VAULT_ROLE
+            value: {{ .Values.vault.role }}
+          - name: NAMESPACE
+            value: {{ .Release.Namespace }}
+          - name: SECRET_TARGET
+            value: {{ $name }}-vault
+          - name: SECRET_SOURCES
+            value: {{ .Values.vault.secretSources }}
+{{- end }}
+{{- end }}
+      containers:
+        - name: app
+          image: {{ $image }}
+{{- if .Values.container.command }}
+          command: {{ toJson .Values.container.command }}
+{{- end }}
+{{ include "base-service.appEnv" $context | indent 10 }}
+{{- if .Values.sidecars.sso.enabled }}
+        - name: sso
+          image: "{{ .Values.sidecars.sso.image }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.container.port }}
+              protocol: TCP
+          env:
+          - name: OAUTH2_PROXY_COOKIE_SECURE
+            value: {{ .Values.sidecars.sso.cookieSecure | quote }}
+          - name: OAUTH2_PROXY_PASS_HOST_HEADER
+            value: {{ .Values.sidecars.sso.passHostHeader | quote }}
+          - name: OAUTH2_PROXY_SKIP_PROVIDER_BUTTON
+            value: {{ .Values.sidecars.sso.skipProviderButton | quote }}
+          - name: OAUTH2_PROXY_AZURE_TENANT
+            value: {{ .Values.sidecars.sso.azureTenant }}
+          - name: OAUTH2_PROXY_EMAIL_DOMAINS
+            value: {{ .Values.sidecars.sso.emailDomains }}
+          - name: OAUTH2_PROXY_PROVIDER
+            value: {{ .Values.sidecars.sso.provider }}
+          - name: OAUTH2_PROXY_REDIRECT_URL
+            value: "https://{{ $fqdn }}/oauth2/callback"
+          - name: OAUTH2_PROXY_UPSTREAMS
+            value: "http://localhost:{{ .Values.container.port }}/"
+          - name: OAUTH2_PROXY_HTTP_ADDRESS
+            value: "0.0.0.0:4180"
+          - name: OAUTH2_PROXY_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ $name }}-secrets
+                key: OAUTH2_PROXY_CLIENT_SECRET
+          - name: OAUTH2_PROXY_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ $name }}-secrets
+                key: OAUTH2_PROXY_CLIENT_ID
+          - name: OAUTH2_PROXY_COOKIE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ $name }}-secrets
+                key: OAUTH2_PROXY_COOKIE_SECRET
+{{- end }}
